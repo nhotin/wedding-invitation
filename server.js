@@ -26,16 +26,71 @@ const MIME_TYPES = {
   '.woff2': 'font/woff2'
 };
 
+const CROSS_ORIGIN_IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.ico', '.svg']);
+
+function escapeHtmlAttr(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function extractSafeGuestParam(rawUrl) {
+  try {
+    const parsed = new URL(rawUrl || '/', 'http://localhost');
+    const rawGuest = parsed.searchParams.get('guest');
+    if (!rawGuest) return '';
+    return rawGuest
+      .replace(/[\x00-\x1F\x7F]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 60);
+  } catch (_) {
+    return '';
+  }
+}
+
+function renderPersonalizedIndexHtml(filePath, guestName) {
+  let html = fs.readFileSync(filePath, 'utf8');
+  if (!guestName) return html;
+
+  const safeGuest = escapeHtmlAttr(guestName);
+  const personalizedTitle = `Thân mời ${safeGuest} — Thiệp Cưới Nho Tín &amp; Hồng Ngân`;
+  const personalizedDesc = `Trân trọng kính mời ${safeGuest} đến dự Lễ Thành Hôn của Lê Tô Nho Tín &amp; Mai Phúc Hồng Ngân — Chủ Nhật, ngày 20 tháng 12 năm 2026.`;
+  const personalizedUrl = escapeHtmlAttr(`${config.publicOrigin}/?guest=${encodeURIComponent(guestName)}`);
+
+  html = html.replace(
+    '<title>Thiệp Cưới Song Hỷ Xanh — Nho Tín &amp; Hồng Ngân</title>',
+    `<title>${personalizedTitle}</title>`
+  );
+  html = html.replaceAll(
+    'content="Thiệp Mời Cưới — Nho Tín &amp; Hồng Ngân (20.12.2026)"',
+    `content="${personalizedTitle}"`
+  );
+  html = html.replaceAll(
+    'content="Trân trọng kính mời quý khách đến dự Lễ Thành Hôn của Lê Tô Nho Tín &amp; Mai Phúc Hồng Ngân — Chủ Nhật, ngày 20 tháng 12 năm 2026."',
+    `content="${personalizedDesc}"`
+  );
+  html = html.replace(
+    '<meta property="og:url" content="https://wedding.nhotin.space/" />',
+    `<meta property="og:url" content="${personalizedUrl}" />`
+  );
+  return html;
+}
+
 // Strict allowlist of top-level public files
 const EXACT_FILES = new Map([
-  ['/', { rel: 'index.html', cache: 'no-cache', isAdminPage: false }],
-  ['/index.html', { rel: 'index.html', cache: 'no-cache', isAdminPage: false }],
+  ['/', { rel: 'index.html', cache: 'no-cache', isAdminPage: false, isIndexHtml: true }],
+  ['/index.html', { rel: 'index.html', cache: 'no-cache', isAdminPage: false, isIndexHtml: true }],
   ['/admin', { rel: 'admin.html', cache: 'no-store', isAdminPage: true }],
   ['/admin/', { rel: 'admin.html', cache: 'no-store', isAdminPage: true }],
   ['/styles.css', { rel: 'styles.css', cache: 'public, max-age=3600', isAdminPage: false }],
   ['/app.js', { rel: 'app.js', cache: 'public, max-age=3600', isAdminPage: false }],
   ['/admin.css', { rel: 'admin.css', cache: 'no-cache', isAdminPage: false }],
   ['/admin.js', { rel: 'admin.js', cache: 'no-cache', isAdminPage: false }],
+  ['/og-wedding-card.jpg', { rel: path.join('public', 'og-wedding-card.jpg'), cache: 'public, max-age=86400', isAdminPage: false }],
   ['/favicon.ico', { rel: path.join('public', 'favicon.ico'), cache: 'public, max-age=86400', isAdminPage: false }],
   ['/favicon.png', { rel: path.join('public', 'favicon.png'), cache: 'public, max-age=86400', isAdminPage: false }],
   ['/apple-touch-icon.png', { rel: path.join('public', 'apple-touch-icon.png'), cache: 'public, max-age=86400', isAdminPage: false }]
@@ -103,7 +158,12 @@ function resolvePublicFile(urlPath) {
     try {
       const realPath = fs.realpathSync(fullPath);
       if (!realPath.startsWith(ROOT + path.sep)) return null;
-      return { filePath: realPath, cache: entry.cache, isAdminPage: entry.isAdminPage };
+      return {
+        filePath: realPath,
+        cache: entry.cache,
+        isAdminPage: entry.isAdminPage,
+        isIndexHtml: Boolean(entry.isIndexHtml)
+      };
     } catch (_) {
       return null;
     }
@@ -220,12 +280,37 @@ const server = http.createServer(async (req, res) => {
 
     const ext = path.extname(resolved.filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+    const crossOriginMedia = CROSS_ORIGIN_IMAGE_EXTS.has(ext);
     const baseHeaders = {
-      ...buildSecurityHeaders(req, { isAdminPage: resolved.isAdminPage }),
+      ...buildSecurityHeaders(req, { isAdminPage: resolved.isAdminPage, crossOriginMedia }),
       'Content-Type': contentType,
       'Cache-Control': resolved.cache,
       'Accept-Ranges': 'bytes'
     };
+
+    if (crossOriginMedia) {
+      baseHeaders['Last-Modified'] = stat.mtime.toUTCString();
+      baseHeaders['ETag'] = `"${stat.size.toString(16)}-${Math.floor(stat.mtimeMs).toString(16)}"`;
+    }
+
+    // Dynamic OG/meta personalization for ?guest=... links (HTML-escaped server-side)
+    if (resolved.isIndexHtml) {
+      const guestName = extractSafeGuestParam(req.url);
+      if (guestName) {
+        try {
+          const html = renderPersonalizedIndexHtml(resolved.filePath, guestName);
+          const buf = Buffer.from(html, 'utf8');
+          res.writeHead(200, {
+            ...baseHeaders,
+            'Content-Length': buf.length
+          });
+          res.end(method === 'HEAD' ? '' : buf);
+          return;
+        } catch (_) {
+          // Fall through to static file serving on unexpected read error
+        }
+      }
+    }
 
     // Support safe HTTP Range requests for smooth MP3 audio playback
     const rangeHeader = req.headers.range;

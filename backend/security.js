@@ -339,7 +339,7 @@ function isOriginAllowed(req) {
   return false;
 }
 
-function buildSecurityHeaders(req, { isAdminPage = false } = {}) {
+function buildSecurityHeaders(req, { isAdminPage = false, crossOriginMedia = false } = {}) {
   // TODO(security): Public wedding invitation page (index.html) uses inline style="..." attributes
   // from the original Song Hy Xanh template, requiring style-src 'unsafe-inline'. Script execution
   // strictly enforces script-src 'self' with zero inline scripts or eval. The /admin page uses
@@ -355,7 +355,7 @@ function buildSecurityHeaders(req, { isAdminPage = false } = {}) {
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
     'Cross-Origin-Opener-Policy': 'same-origin',
-    'Cross-Origin-Resource-Policy': 'same-origin'
+    'Cross-Origin-Resource-Policy': crossOriginMedia ? 'cross-origin' : 'same-origin'
   };
 
   if (isHttpsRequest(req)) {
