@@ -134,8 +134,29 @@ Mỗi khi khách mời điền form **Sổ Lưu Bút** hoặc **Xác Nhận Tham
 
 ### Các API Endpoints
 
-- `GET /api/wishes` - Lấy danh sách lời chúc từ `data/submissions/wishes.json`.
-- `POST /api/wishes` - Gửi lời chúc mới (`{ "name": "...", "message": "..." }`).
-- `GET /api/rsvps` - Lấy danh sách và thống kê xác nhận tham dự từ `data/submissions/rsvps.json`.
-- `POST /api/rsvps` - Gửi xác nhận tham dự (`{ "name": "...", "attending": "yes", "guests": 2, "note": "..." }`).
-- `GET /api/submissions` - Xem toàn bộ dữ liệu tổng hợp trực tiếp trên trình duyệt tại `http://localhost:3003/api/submissions`.
+- `GET /api/health` - Kiểm tra trạng thái hoạt động của dịch vụ.
+- `GET /api/wishes` - Lấy danh sách lời chúc công khai từ `data/submissions/wishes.json`.
+- `POST /api/wishes` - Gửi lời chúc mới (`{ "name": "...", "message": "..." }`), tự động lưu JSON và gửi thông báo Telegram.
+- `POST /api/rsvps` - Gửi xác nhận tham dự (`{ "name": "...", "attending": "yes", "guests": 2, "note": "..." }`), tự động lưu JSON và gửi thông báo Telegram khi khách đồng ý tham dự.
+- `GET /api/rsvps` *(Bảo vệ — yêu cầu đăng nhập `/admin` hoặc Bearer Token)* - Lấy danh sách và thống kê xác nhận tham dự.
+- `GET /api/submissions` *(Bảo vệ — yêu cầu đăng nhập `/admin` hoặc Bearer Token)* - Lấy toàn bộ dữ liệu tổng hợp RSVP và lời chúc.
+
+---
+
+## Trang Quản Trị (`/admin`), Thông Báo Telegram và Bảo Mật Production
+
+1. **Cấu hình biến môi trường (`.env`)**:
+   - Sao chép [`.env.example`](.env.example) sang `~/.config/wedding-invitation/.env` (khuyến nghị, đặt quyền `chmod 600`) hoặc `.env` tại thư mục gốc dự án (đã được `.gitignore` loại trừ khỏi Git).
+   - Đặt mật khẩu quản trị (lưu dạng băm `scrypt`, không lưu plaintext):
+     ```bash
+     node scripts/set-admin-password.js
+     ```
+   - Điền `TELEGRAM_BOT_TOKEN` và `TELEGRAM_CHAT_ID` trong `.env` để nhận thông báo Telegram tức thì khi có khách đồng ý tham dự hoặc gửi lời chúc mới.
+
+2. **Trang quản trị `/admin`**:
+   - Truy cập `/admin` để xem thống kê tổng số khách dự kiến, tìm kiếm/lọc danh sách RSVP, đọc sổ lưu bút, xóa mục spam, kiểm tra kết nối Telegram và xuất file CSV/JSON.
+   - Phiên đăng nhập sử dụng cookie `HttpOnly` + `SameSite=Strict` (+ `__Host-` & `Secure` trên HTTPS), bảo vệ CSRF và tự khóa IP tạm thời nếu nhập sai mật khẩu quá 5 lần.
+
+3. **Triển khai Production với Nginx + Cloudflare Tunnel**:
+   - Máy chủ Node.js lắng nghe nội bộ `127.0.0.1` (`PORT=3008`), áp dụng allowlist tệp tĩnh nghiêm ngặt (chặn truy cập mã nguồn, `.git`, `.env`, `data/submissions/*.json`), CSP chặt chẽ, HSTS, chống XSS và giới hạn tốc độ gửi form.
+   - Cấu hình Nginx và script triển khai nằm trong thư mục `deploy/`.

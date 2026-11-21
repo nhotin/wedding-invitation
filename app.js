@@ -214,7 +214,7 @@
   // Radial burst of glowing 囍 on open
   function spawnBurstParticles() {
     if (!burstContainer) return;
-    burstContainer.innerHTML = '';
+    burstContainer.replaceChildren();
     const count = 28;
     for (let t = 0; t < count; t++) {
       const angle = (2 * Math.PI * t) / count + (Math.random() - 0.5) * 0.4;
@@ -234,7 +234,7 @@
       burstContainer.appendChild(el);
     }
     setTimeout(() => {
-      if (burstContainer) burstContainer.innerHTML = '';
+      if (burstContainer) burstContainer.replaceChildren();
     }, 1500);
   }
 
@@ -384,7 +384,7 @@
 
   function renderMusicTrackList() {
     if (!musicTrackList) return;
-    musicTrackList.innerHTML = '';
+    musicTrackList.replaceChildren();
     ROMANTIC_TRACKS.forEach((track) => {
       const isSelected = track.id === currentTrackId;
       const btn = document.createElement('button');
@@ -393,13 +393,28 @@
         isSelected ? 'font-semibold' : 'hover:bg-black/5'
       }`;
       btn.style.backgroundColor = isSelected ? 'rgba(31,58,37,0.12)' : '';
-      btn.innerHTML = `
-        <div class="min-w-0 flex-1">
-          <div class="truncate text-xs" style="color:#1F3A25">${track.title}</div>
-          <div class="truncate text-[10px] opacity-70">${track.artist}</div>
-        </div>
-        <span class="text-xs">${isSelected ? '♪' : ''}</span>
-      `;
+
+      const meta = document.createElement('div');
+      meta.className = 'min-w-0 flex-1';
+
+      const titleEl = document.createElement('div');
+      titleEl.className = 'truncate text-xs';
+      titleEl.style.color = '#1F3A25';
+      titleEl.textContent = track.title;
+
+      const artistEl = document.createElement('div');
+      artistEl.className = 'truncate text-[10px] opacity-70';
+      artistEl.textContent = track.artist;
+
+      meta.appendChild(titleEl);
+      meta.appendChild(artistEl);
+
+      const indicator = document.createElement('span');
+      indicator.className = 'text-xs';
+      indicator.textContent = isSelected ? '♪' : '';
+
+      btn.appendChild(meta);
+      btn.appendChild(indicator);
       btn.addEventListener('click', () => {
         applyTrack(track.id, true);
         musicPickerPanel?.classList.add('hidden');
@@ -584,7 +599,12 @@
       slide.className = 'absolute h-[92%] rounded-2xl overflow-hidden shadow-xl cursor-pointer transition-all ease-in-out';
       slide.style.aspectRatio = '0.6666666666666666';
       slide.style.transitionDuration = '1100ms';
-      slide.innerHTML = `<img alt="Wedding photo ${idx + 1}" class="h-full w-full object-cover" src="${src}" style="object-position:50% 50%" />`;
+      const slideImg = document.createElement('img');
+      slideImg.alt = `Wedding photo ${idx + 1}`;
+      slideImg.className = 'h-full w-full object-cover';
+      slideImg.src = src;
+      slideImg.style.objectPosition = '50% 50%';
+      slide.appendChild(slideImg);
       slide.addEventListener('click', () => {
         if (idx === activeSlide) {
           openLightbox(idx);
@@ -605,7 +625,12 @@
       const thumb = document.createElement('button');
       thumb.type = 'button';
       thumb.setAttribute('aria-label', `View image ${idx + 1}`);
-      thumb.innerHTML = `<img alt="Thumbnail ${idx + 1}" class="h-full w-full object-cover" draggable="false" src="${src}" />`;
+      const thumbImg = document.createElement('img');
+      thumbImg.alt = `Thumbnail ${idx + 1}`;
+      thumbImg.className = 'h-full w-full object-cover';
+      thumbImg.draggable = false;
+      thumbImg.src = src;
+      thumb.appendChild(thumbImg);
       thumb.addEventListener('click', (e) => {
         e.stopPropagation();
         updateLightboxSlide(idx);
@@ -770,15 +795,28 @@
       const cell = document.createElement('div');
       cell.className = 'flex items-center justify-center h-[30px] md:h-[34px]';
       if (d === 20) {
-        cell.innerHTML = `
-          <div class="relative w-[26px] h-[24px] md:w-[30px] md:h-[28px] flex items-center justify-center">
-            <svg class="absolute inset-0 w-full h-full drop-shadow-sm" fill="#1F3A25" viewBox="0 0 24 22">
-              <path d="M12 21C12 21 1.5 13.5 1.5 7.5C1.5 4.46 3.96 2 7 2C8.76 2 10.35 2.81 11.4 4.09L12 4.8L12.6 4.09C13.65 2.81 15.24 2 17 2C20.04 2 22.5 4.46 22.5 7.5C22.5 13.5 12 21 12 21Z"></path>
-            </svg>
-            <span class="relative z-10 text-[11px] md:text-[12px] font-bold" style="color:#fff">20</span>
-          </div>`;
+        const wrap = document.createElement('div');
+        wrap.className = 'relative w-[26px] h-[24px] md:w-[30px] md:h-[28px] flex items-center justify-center';
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('class', 'absolute inset-0 w-full h-full drop-shadow-sm');
+        svg.setAttribute('fill', '#1F3A25');
+        svg.setAttribute('viewBox', '0 0 24 22');
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', 'M12 21C12 21 1.5 13.5 1.5 7.5C1.5 4.46 3.96 2 7 2C8.76 2 10.35 2.81 11.4 4.09L12 4.8L12.6 4.09C13.65 2.81 15.24 2 17 2C20.04 2 22.5 4.46 22.5 7.5C22.5 13.5 12 21 12 21Z');
+        svg.appendChild(path);
+        const dayNum = document.createElement('span');
+        dayNum.className = 'relative z-10 text-[11px] md:text-[12px] font-bold';
+        dayNum.style.color = '#fff';
+        dayNum.textContent = '20';
+        wrap.appendChild(svg);
+        wrap.appendChild(dayNum);
+        cell.appendChild(wrap);
       } else {
-        cell.innerHTML = `<span class="text-[12px] md:text-[13px]">${d}</span>`;
+        const span = document.createElement('span');
+        span.className = 'text-[12px] md:text-[13px]';
+        span.textContent = String(d);
+        cell.appendChild(span);
       }
       grid.appendChild(cell);
     }
@@ -807,30 +845,43 @@
     try { localStorage.setItem(STORAGE_WISHES_KEY, JSON.stringify(list)); } catch (_) {}
   }
 
-  function escapeHtml(s) {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
   function renderWishes(listOpt) {
     if (!wishesListEl) return;
     const list = Array.isArray(listOpt) ? listOpt : loadWishes();
-    wishesListEl.innerHTML = list
-      .map(
-        (w) => `
-        <div class="bg-white rounded-lg p-4 shadow-md border border-gray-100">
-          <div class="flex items-start justify-between">
-            <span class="text-lg" style="color:#1F3A25;font-family:'Times New Roman', ChungDoiIndic, serif">${escapeHtml(w.name || '')}</span>
-            <span class="text-xs opacity-70">${escapeHtml(w.time || '')}</span>
-          </div>
-          <p class="mt-2 leading-relaxed">${escapeHtml(w.message || '')}</p>
-        </div>`
-      )
-      .join('');
+    wishesListEl.replaceChildren();
+    list.forEach((w) => {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-lg p-4 shadow-md border border-gray-100';
+
+      const header = document.createElement('div');
+      header.className = 'flex items-start justify-between';
+
+      const nameEl = document.createElement('span');
+      nameEl.className = 'text-lg';
+      nameEl.style.color = '#1F3A25';
+      nameEl.style.fontFamily = "'Times New Roman', ChungDoiIndic, serif";
+      nameEl.textContent = String(w.name || '');
+
+      const timeEl = document.createElement('span');
+      timeEl.className = 'text-xs opacity-70';
+      timeEl.textContent = String(w.time || '');
+
+      header.appendChild(nameEl);
+      header.appendChild(timeEl);
+
+      const msgEl = document.createElement('p');
+      msgEl.className = 'mt-2 leading-relaxed';
+      msgEl.textContent = String(w.message || '');
+
+      card.appendChild(header);
+      card.appendChild(msgEl);
+      wishesListEl.appendChild(card);
+    });
   }
 
   async function fetchWishesFromServer() {
     try {
-      const res = await fetch('/api/wishes', { headers: { Accept: 'application/json' } });
+      const res = await fetch('/api/wishes', { headers: { Accept: 'application/json' }, cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
       if (data && data.ok && Array.isArray(data.wishes)) {
@@ -847,18 +898,21 @@
     if (!name || !message) return;
 
     const now = new Date();
-    const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')} ${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+    const fallbackTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')} ${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
     const submitBtn = wishForm.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
 
     let savedOnServer = false;
+    let rateLimited = false;
     try {
       const res = await fetch('/api/wishes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, message, time })
+        body: JSON.stringify({ name, message })
       });
-      if (res.ok) {
+      if (res.status === 429) {
+        rateLimited = true;
+      } else if (res.ok) {
         const data = await res.json();
         if (data && data.ok && Array.isArray(data.wishes)) {
           saveWishes(data.wishes);
@@ -868,16 +922,18 @@
       }
     } catch (_) {}
 
-    if (!savedOnServer) {
+    if (!savedOnServer && !rateLimited) {
       const list = loadWishes();
-      list.unshift({ name, message, time });
+      list.unshift({ name, message, time: fallbackTime });
       saveWishes(list);
       renderWishes(list);
     }
 
     if (submitBtn) submitBtn.disabled = false;
-    wishNameInput.value = '';
-    wishMsgInput.value = '';
+    if (!rateLimited) {
+      wishNameInput.value = '';
+      wishMsgInput.value = '';
+    }
   });
 
   /* ==========================================================================
@@ -1004,10 +1060,21 @@
 
     const msgEl = document.getElementById('rsvp-thankyou-msg');
     if (msgEl) {
-      msgEl.innerHTML =
-        currentAttending === 'yes'
-          ? `<p>Đã ghi nhận xác nhận tham dự của <strong>${escapeHtml(name)}</strong> (${currentGuests} khách).</p><p>Rất mong được đón tiếp bạn tại buổi tiệc!</p>`
-          : `<p>Cảm ơn <strong>${escapeHtml(name)}</strong> đã phản hồi.</p><p>Gia đình rất trân quý tình cảm của bạn!</p>`;
+      msgEl.replaceChildren();
+      const p1 = document.createElement('p');
+      const strong = document.createElement('strong');
+      strong.textContent = name;
+      const p2 = document.createElement('p');
+
+      if (currentAttending === 'yes') {
+        p1.append('Đã ghi nhận xác nhận tham dự của ', strong, ` (${currentGuests} khách).`);
+        p2.textContent = 'Rất mong được đón tiếp bạn tại buổi tiệc!';
+      } else {
+        p1.append('Cảm ơn ', strong, ' đã phản hồi.');
+        p2.textContent = 'Gia đình rất trân quý tình cảm của bạn!';
+      }
+      msgEl.appendChild(p1);
+      msgEl.appendChild(p2);
     }
 
     rsvpFormContainer?.classList.add('hidden');

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Quản Trị Thiệp Cưới — Nho Tín &amp; Hồng Ngân</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/admin.css" />
+</head>
+
+<body>
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- LOGIN VIEW -->
+  <main id="login-view" class="auth-shell">
+    <section class="auth-card" aria-labelledby="auth-title">
+      <div class="auth-emblem" aria-hidden="true">囍</div>
+      <h1 id="auth-title" class="auth-title">Quản Trị Thiệp Cưới</h1>
+      <p class="auth-subtitle">Lê Tô Nho Tín &amp; Mai Phúc Hồng Ngân • 20/12/2026</p>
+
+      <form id="login-form" class="auth-form" autocomplete="off" novalidate>
+        <label class="field-label" for="admin-password">Mật khẩu quản trị</label>
+        <div class="password-row">
+          <input
+            id="admin-password"
+            name="password"
+            type="password"
+            class="text-input"
+            placeholder="Nhập mật khẩu..."
+            autocomplete="current-password"
+            required
+          />
+          <button id="toggle-password-btn" type="button" class="btn-ghost" aria-label="Hiện hoặc ẩn mật khẩu">
+            Hiện
+          </button>
+        </div>
+
+        <p id="login-error" class="error-banner hidden" role="alert"></p>
+
+        <button id="login-submit-btn" type="submit" class="btn-primary btn-full">
+          Đăng nhập
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <a href="/" class="link-subtle">← Quay lại thiệp cưới</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboard-view" class="dashboard-shell hidden">
+    <header class="topbar">
+      <div class="topbar-brand">
+        <span class="brand-badge" aria-hidden="true">囍</span>
+        <div>
+          <h1 class="brand-title">Quản Trị Thiệp Cưới</h1>
+          <p class="brand-sub">Nho Tín &amp; Hồng Ngân • wedding.nhotin.space</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <span id="telegram-status-pill" class="status-pill">Telegram: Đang kiểm tra</span>
+        <a href="/" target="_blank" rel="noopener noreferrer" class="btn-secondary">Xem thiệp</a>
+        <button id="refresh-btn" type="button" class="btn-secondary">Làm mới</button>
+        <button id="test-tg-btn" type="button" class="btn-secondary">Test Telegram</button>
+        <button id="logout-btn" type="button" class="btn-danger">Đăng xuất</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- SUMMARY CARDS -->
+      <section class="stats-grid" aria-label="Thống kê tổng quan">
+        <article class="stat-card stat-highlight">
+          <p class="stat-label">Tổng khách dự kiến</p>
+          <p id="stat-total-guests" class="stat-value">0</p>
+          <p class="stat-note">Tính từ các lượt xác nhận tham dự</p>
+        </article>
+        <article class="stat-card">
+          <p class="stat-label">Đồng ý tham dự</p>
+          <p id="stat-attending" class="stat-value">0</p>
+          <p id="stat-total-responses" class="stat-note">0 phản hồi RSVP</p>
+        </article>
+        <article class="stat-card">
+          <p class="stat-label">Báo bận</p>
+          <p id="stat-declined" class="stat-value">0</p>
+          <p class="stat-note">Không thể sắp xếp tham dự</p>
+        </article>
+        <article class="stat-card">
+          <p class="stat-label">Lời chúc sổ lưu bút</p>
+          <p id="stat-wishes" class="stat-value">0</p>
+          <p id="stat-updated-at" class="stat-note">Chưa cập nhật</p>
+        </article>
+      </section>
+
+      <!-- TABS & EXPORTS -->
+      <section class="toolbar">
+        <div class="tabs" role="tablist" aria-label="Danh mục dữ liệu">
+          <button id="tab-rsvps" type="button" class="tab-btn active" role="tab" aria-selected="true">
+            Danh sách RSVP (<span id="tab-rsvps-count">0</span>)
+          </button>
+          <button id="tab-wishes" type="button" class="tab-btn" role="tab" aria-selected="false">
+            Sổ lưu bút (<span id="tab-wishes-count">0</span>)
+          </button>
+        </div>
+
+        <div class="export-group">
+          <button id="export-csv-btn" type="button" class="btn-secondary">Xuất CSV RSVP</button>
+          <button id="export-json-btn" type="button" class="btn-secondary">Xuất JSON</button>
+        </div>
+      </section>
+
+      <!-- RSVPS PANEL -->
+      <section id="panel-rsvps" class="panel" role="tabpanel" aria-labelledby="tab-rsvps">
+        <div class="filter-bar">
+          <input
+            id="rsvp-search"
+            type="search"
+            class="text-input search-input"
+            placeholder="Tìm kiếm tên khách mời hoặc lời nhắn..."
+          />
+          <div class="filter-pills" role="group" aria-label="Lọc trạng thái tham dự">
+            <button type="button" class="pill-btn active" data-filter="all">Tất cả</button>
+            <button type="button" class="pill-btn" data-filter="yes">Đồng ý</button>
+            <button type="button" class="pill-btn" data-filter="no">Báo bận</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Khách mời</th>
+                <th>Trạng thái</th>
+                <th>Số khách</th>
+                <th>Lời nhắn</th>
+                <th>Thời gian</th>
+                <th class="col-action">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="rsvp-tbody"></tbody>
+          </table>
+          <p id="rsvp-empty" class="empty-state hidden">Chưa có phản hồi xác nhận tham dự nào.</p>
+        </div>
+      </section>
+
+      <!-- WISHES PANEL -->
+      <section id="panel-wishes" class="panel hidden" role="tabpanel" aria-labelledby="tab-wishes">
+        <div class="filter-bar">
+          <input
+            id="wish-search"
+            type="search"
+            class="text-input search-input"
+            placeholder="Tìm kiếm tên người gửi hoặc nội dung lời chúc..."
+          />
+        </div>
+
+        <div id="wishes-grid" class="wishes-grid"></div>
+        <p id="wishes-empty" class="empty-state hidden">Chưa có lời chúc nào trong sổ lưu bút.</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- CONFIRM DELETE DIALOG -->
+  <dialog id="confirm-dialog" class="modal-dialog">
+    <div class="modal-box">
+      <h2 id="confirm-title" class="modal-title">Xác nhận xóa</h2>
+      <p id="confirm-message" class="modal-message"></p>
+      <div class="modal-actions">
+        <button id="confirm-cancel-btn" type="button" class="btn-secondary">Hủy</button>
+        <button id="confirm-ok-btn" type="button" class="btn-danger">Xóa bản ghi</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="/admin.js"></script>
+</body>
+
+</html>
