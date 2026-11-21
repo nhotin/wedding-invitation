@@ -70,13 +70,47 @@ html, body {
 
 @keyframes seal-pulse {
   0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 4px 20px var(--shadow-color), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1);
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.06);
-    box-shadow: 0 6px 35px var(--shadow-color), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transform: translate3d(-50%, -50%, 0) scale3d(1.06, 1.06, 1);
   }
+}
+
+@keyframes seal-glow-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale3d(0.95, 0.95, 1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale3d(1.18, 1.18, 1);
+  }
+}
+
+#wax-seal {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+#wax-seal::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(232, 240, 228, 0.45) 0%, rgba(232, 240, 228, 0) 72%);
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform, opacity;
+  animation: seal-glow-pulse 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+#wax-seal > div {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 @keyframes seal-break {
@@ -114,8 +148,8 @@ html, body {
 }
 
 @keyframes shine {
-  0% { left: -100%; transform: skewX(-20deg); }
-  50%, 100% { left: 200%; transform: skewX(-20deg); }
+  0% { transform: translate3d(-260%, 0, 0) skewX(-20deg); }
+  50%, 100% { transform: translate3d(260%, 0, 0) skewX(-20deg); }
 }
 
 @keyframes dragon-fly-forward {
