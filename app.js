@@ -320,6 +320,12 @@
       src: '/data/audio/mot-doi.mp3'
     },
     {
+      id: 'tinh-chenh-pho',
+      title: 'Tình Chênh Phô (Tâm Sự 3)',
+      artist: 'Trúc Nhân (Album Tân Mùi)',
+      src: '/data/audio/tinh-chenh-pho.mp3'
+    },
+    {
       id: 'cant-help-falling-in-love',
       title: "Can't Help Falling In Love",
       artist: 'Kina Grannis (Acoustic nhẹ nhàng)',
