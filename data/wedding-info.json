@@ -1,0 +1,140 @@
+{
+  "sourceUrl": "https://sonstudio.vn/thiep-cuoi-online-v2-copy-copy/",
+  "title": "Nho Tín & Hồng Ngân",
+  "couple": {
+    "groom": {
+      "shortName": "Nho Tín",
+      "fullName": "Lê Tô Nho Tín",
+      "role": "Út Nam"
+    },
+    "bride": {
+      "shortName": "Hồng Ngân",
+      "fullName": "Mai Phúc Hồng Ngân",
+      "role": "Trưởng Nữ"
+    }
+  },
+  "families": {
+    "groomFamily": {
+      "title": "Ông Bà",
+      "father": "Lê Nho Lượng",
+      "mother": "Tô Nguyễn Anh Thi",
+      "address": "178/24 Huỳnh Văn Luỹ, KP. Phú Hữu, P. Phú Lợi, TP. Hồ Chí Minh"
+    },
+    "brideFamily": {
+      "title": "Ông Bà",
+      "father": "Mai Xuân Đông",
+      "mother": "Lê Thị Thu",
+      "address": "Thôn Phong An, Xã Phù Cát, Tỉnh Gia Lai"
+    }
+  },
+  "ceremony": {
+    "name": "Lễ Thành Hôn",
+    "headline": "TRÂN TRỌNG BÁO TIN LỄ THÀNH HÔN CỦA CON CHÚNG TÔI",
+    "locationType": "TƯ GIA",
+    "time": "08:05",
+    "timeDisplay": "08H05",
+    "dayOfWeek": "Chủ Nhật",
+    "date": "2026-12-20",
+    "dateDisplay": "20 tháng 12, 2026",
+    "lunarDate": "Ngày 12 tháng 11 năm Bính Ngọ"
+  },
+  "reception": {
+    "name": "Tiệc Cưới",
+    "welcomeTime": "10:30",
+    "startTime": "11:30",
+    "dayOfWeek": "Chủ Nhật",
+    "date": "2026-12-20",
+    "lunarDate": "Ngày 12 tháng 11 năm Bính Ngọ",
+    "venue": {
+      "name": "TƯ GIA",
+      "address": "B9 - Ô 07, Đ. Ven Sông Thị Tính, Khu Mega City Cầu Đò 2, P. Long Nguyên, TP. Hồ Chí Minh",
+      "coordinates": {
+        "lat": 11.143371,
+        "lng": 106.591206
+      },
+      "googleMapsUrl": "https://maps.app.goo.gl/kDFvtC64JBinmV1E9",
+      "googleMapsEmbedUrl": "https://maps.google.com/maps?q=11.143371,106.591206&hl=vi&z=17&output=embed"
+    },
+    "timeline": [
+      {
+        "time": "10:30",
+        "event": "Đón khách"
+      },
+      {
+        "time": "11:30",
+        "event": "Khai tiệc"
+      },
+      {
+        "time": "12:00",
+        "event": "Nghi thức cưới"
+      },
+      {
+        "time": "12:30",
+        "event": "Cắt bánh & nâng ly"
+      },
+      {
+        "time": "13:30",
+        "event": "Kết thúc tiệc"
+      }
+    ]
+  },
+  "dressCode": {
+    "title": "DRESS CODE",
+    "subtitle": "Trang phục dự tiệc",
+    "colors": [
+      "#8FA595",
+      "#DDD0BB",
+      "#686156",
+      "#E3C2C2"
+    ]
+  },
+  "giftBox": {
+    "title": "HỘP QUÀ MỪNG",
+    "subtitle": "Quét QR code để gửi yêu thương trực tiếp tới:",
+    "displayBoth": true,
+    "referenceImage": "references/gift-box-modal-ref.jpg",
+    "designNotes": "Modal bo góc với header màu đậm (tiêu đề serif in hoa căn giữa + nút X góc phải), thân modal chia 2 cột cạnh nhau (Chú Rể bên trái, Cô Dâu bên phải). Mỗi cột gồm: tiêu đề 'Chú Rể / Cô Dâu - Họ Tên', khung trắng bo góc đổ bóng chứa mã QR thuần, thông tin Ngân hàng / STK / Tên chủ TK in đậm, và nút pill 'Lưu QR' có icon download.",
+    "groom": {
+      "label": "Chú Rể - Lê Tô Nho Tín",
+      "bankName": "Techcombank",
+      "bankBin": "970407",
+      "accountNumber": "0963620379",
+      "accountHolder": "Lê Tô Nho Tín",
+      "accountHolderUnsigned": "LE TO NHO TIN",
+      "qrImageCustom": "images/qr-groom-wedding-custom.png",
+      "qrImageOnly": "images/qr-groom-vietqr-only.png"
+    },
+    "bride": {
+      "label": "Cô Dâu - Mai Phúc Hồng Ngân",
+      "bankName": "TP Bank",
+      "bankBin": "970423",
+      "accountNumber": "07559711813",
+      "accountHolder": "Mai Phúc Hồng Ngân",
+      "accountHolderUnsigned": "MAI PHUC HONG NGAN",
+      "qrImageCustom": "images/qr-bride-wedding-custom.png",
+      "qrImageOnly": "images/qr-bride-vietqr-only.png",
+      "qrImageOriginal": "images/qr-bank.jpg"
+    }
+  },
+  "closingMessage": "Sự hiện diện của quý khách là niềm vinh hạnh của gia đình chúng tôi!",
+  "audio": {
+    "title": "Em Đồng Ý (I Do)",
+    "file": "audio/em-dong-y-i-do.mp3",
+    "sourceUrl": "https://sonstudio.vn/wp-content/uploads/2026/10/Em-Dong-Y-I-Do-1.mp3"
+  },
+  "images": {
+    "cover": "images/cover-DXD_9823.jpg",
+    "hero": "images/hero-DXD_8369.jpg",
+    "qrBank": "images/qr-bank.jpg",
+    "album": [
+      "images/album/01-DXD_8719.jpg",
+      "images/album/02-DXD_8148-1.jpg",
+      "images/album/03-DXD_9604.jpg",
+      "images/album/04-DXD_7854.jpg",
+      "images/album/05-DXD_9846.jpg",
+      "images/album/06-DXD_8205.jpg",
+      "images/album/07-DXD_8972.jpg",
+      "images/album/08-DXD_8587.jpg"
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 872 872" width="872" height="872">
+  <defs>
+    <clipPath id="sunburst-clip">
+      <circle cx="436" cy="436" r="436"/>
+    </clipPath>
+    <radialGradient id="sunburst-vignette" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2b4f33" stop-opacity="0.35"/>
+      <stop offset="70%" stop-color="#1F3A25" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#162b1b" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+  <g clip-path="url(#sunburst-clip)">
+    <circle cx="436" cy="436" r="436" fill="#1F3A25"/>
+    <path d="M 436 436 L 886.00 436.00 L 884.29 475.22 Z" fill="#26452D"/>
+    <path d="M 436 436 L 879.16 514.14 L 870.67 552.47 Z" fill="#26452D"/>
+    <path d="M 436 436 L 858.86 589.91 L 843.84 626.18 Z" fill="#26452D"/>
+    <path d="M 436 436 L 825.71 661.00 L 804.62 694.11 Z" fill="#26452D"/>
+    <path d="M 436 436 L 780.72 725.25 L 754.20 754.20 Z" fill="#26452D"/>
+    <path d="M 436 436 L 725.25 780.72 L 694.11 804.62 Z" fill="#26452D"/>
+    <path d="M 436 436 L 661.00 825.71 L 626.18 843.84 Z" fill="#26452D"/>
+    <path d="M 436 436 L 589.91 858.86 L 552.47 870.67 Z" fill="#26452D"/>
+    <path d="M 436 436 L 514.14 879.16 L 475.22 884.29 Z" fill="#26452D"/>
+    <path d="M 436 436 L 436.00 886.00 L 396.78 884.29 Z" fill="#26452D"/>
+    <path d="M 436 436 L 357.86 879.16 L 319.53 870.67 Z" fill="#26452D"/>
+    <path d="M 436 436 L 282.09 858.86 L 245.82 843.84 Z" fill="#26452D"/>
+    <path d="M 436 436 L 211.00 825.71 L 177.89 804.62 Z" fill="#26452D"/>
+    <path d="M 436 436 L 146.75 780.72 L 117.80 754.20 Z" fill="#26452D"/>
+    <path d="M 436 436 L 91.28 725.25 L 67.38 694.11 Z" fill="#26452D"/>
+    <path d="M 436 436 L 46.29 661.00 L 28.16 626.18 Z" fill="#26452D"/>
+    <path d="M 436 436 L 13.14 589.91 L 1.33 552.47 Z" fill="#26452D"/>
+    <path d="M 436 436 L -7.16 514.14 L -12.29 475.22 Z" fill="#26452D"/>
+    <path d="M 436 436 L -14.00 436.00 L -12.29 396.78 Z" fill="#26452D"/>
+    <path d="M 436 436 L -7.16 357.86 L 1.33 319.53 Z" fill="#26452D"/>
+    <path d="M 436 436 L 13.14 282.09 L 28.16 245.82 Z" fill="#26452D"/>
+    <path d="M 436 436 L 46.29 211.00 L 67.38 177.89 Z" fill="#26452D"/>
+    <path d="M 436 436 L 91.28 146.75 L 117.80 117.80 Z" fill="#26452D"/>
+    <path d="M 436 436 L 146.75 91.28 L 177.89 67.38 Z" fill="#26452D"/>
+    <path d="M 436 436 L 211.00 46.29 L 245.82 28.16 Z" fill="#26452D"/>
+    <path d="M 436 436 L 282.09 13.14 L 319.53 1.33 Z" fill="#26452D"/>
+    <path d="M 436 436 L 357.86 -7.16 L 396.78 -12.29 Z" fill="#26452D"/>
+    <path d="M 436 436 L 436.00 -14.00 L 475.22 -12.29 Z" fill="#26452D"/>
+    <path d="M 436 436 L 514.14 -7.16 L 552.47 1.33 Z" fill="#26452D"/>
+    <path d="M 436 436 L 589.91 13.14 L 626.18 28.16 Z" fill="#26452D"/>
+    <path d="M 436 436 L 661.00 46.29 L 694.11 67.38 Z" fill="#26452D"/>
+    <path d="M 436 436 L 725.25 91.28 L 754.20 117.80 Z" fill="#26452D"/>
+    <path d="M 436 436 L 780.72 146.75 L 804.62 177.89 Z" fill="#26452D"/>
+    <path d="M 436 436 L 825.71 211.00 L 843.84 245.82 Z" fill="#26452D"/>
+    <path d="M 436 436 L 858.86 282.09 L 870.67 319.53 Z" fill="#26452D"/>
+    <path d="M 436 436 L 879.16 357.86 L 884.29 396.78 Z" fill="#26452D"/>
+    <circle cx="436" cy="436" r="436" fill="url(#sunburst-vignette)"/>
+  </g>
+</svg>

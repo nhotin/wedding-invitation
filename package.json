@@ -1,0 +1,15 @@
+{
+  "name": "wedding-invitation-song-hy-xanh",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Thiệp cưới Song Hỷ Xanh — Nho Tín & Hồng Ngân",
+  "scripts": {
+    "dev": "vite",
+    "start": "node server.js",
+    "build": "vite build",
+    "preview": "vite preview --port 3003"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0"
+  }
+}

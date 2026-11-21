@@ -1,0 +1,21 @@
+{
+  "summary": {
+    "totalResponses": 1,
+    "attendingResponses": 1,
+    "declinedResponses": 0,
+    "totalAttendingGuests": 4,
+    "updatedAt": "2026-11-21T18:19:39.337Z"
+  },
+  "items": [
+    {
+      "id": "rsvp_1795285179335_9m1e",
+      "name": "Ngân ngu",
+      "attending": "yes",
+      "attendingLabel": "Có, mình sẽ tham dự",
+      "guests": 4,
+      "note": "love",
+      "time": "01:19:39 22/11/2026",
+      "createdAt": "2026-11-21T18:19:39.335Z"
+    }
+  ]
+}
