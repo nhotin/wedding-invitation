@@ -52,14 +52,30 @@ function extractSafeGuestParam(rawUrl) {
   }
 }
 
-function renderPersonalizedIndexHtml(filePath, guestName) {
+function renderPersonalizedIndexHtml(filePath, { guestName = '', pathname = '/' } = {}) {
   let html = fs.readFileSync(filePath, 'utf8');
+  const cleanPath = pathname === '/thiep' || pathname === '/thiep/' ? '/thiep' : '/';
+  if (!guestName && cleanPath === '/') return html;
+
+  const targetUrl = guestName
+    ? `${config.publicOrigin}${cleanPath}?guest=${encodeURIComponent(guestName)}`
+    : `${config.publicOrigin}${cleanPath}`;
+  const safeTargetUrl = escapeHtmlAttr(targetUrl);
+
+  html = html.replace(
+    '<meta property="og:url" content="https://wedding.nhotin.space/" />',
+    `<meta property="og:url" content="${safeTargetUrl}" />`
+  );
+  html = html.replace(
+    '<link rel="canonical" href="https://wedding.nhotin.space/" />',
+    `<link rel="canonical" href="${safeTargetUrl}" />`
+  );
+
   if (!guestName) return html;
 
   const safeGuest = escapeHtmlAttr(guestName);
   const personalizedTitle = `Thân mời ${safeGuest} — Thiệp Cưới Nho Tín &amp; Hồng Ngân`;
   const personalizedDesc = `Trân trọng kính mời ${safeGuest} đến dự Lễ Thành Hôn của Lê Tô Nho Tín &amp; Mai Phúc Hồng Ngân — Chủ Nhật, ngày 20 tháng 12 năm 2026.`;
-  const personalizedUrl = escapeHtmlAttr(`${config.publicOrigin}/?guest=${encodeURIComponent(guestName)}`);
 
   html = html.replace(
     '<title>Thiệp Cưới Song Hỷ Xanh — Nho Tín &amp; Hồng Ngân</title>',
@@ -73,10 +89,6 @@ function renderPersonalizedIndexHtml(filePath, guestName) {
     'content="Trân trọng kính mời quý khách đến dự Lễ Thành Hôn của Lê Tô Nho Tín &amp; Mai Phúc Hồng Ngân — Chủ Nhật, ngày 20 tháng 12 năm 2026."',
     `content="${personalizedDesc}"`
   );
-  html = html.replace(
-    '<meta property="og:url" content="https://wedding.nhotin.space/" />',
-    `<meta property="og:url" content="${personalizedUrl}" />`
-  );
   return html;
 }
 
@@ -84,6 +96,8 @@ function renderPersonalizedIndexHtml(filePath, guestName) {
 const EXACT_FILES = new Map([
   ['/', { rel: 'index.html', cache: 'no-cache', isAdminPage: false, isIndexHtml: true }],
   ['/index.html', { rel: 'index.html', cache: 'no-cache', isAdminPage: false, isIndexHtml: true }],
+  ['/thiep', { rel: 'index.html', cache: 'no-cache', isAdminPage: false, isIndexHtml: true }],
+  ['/thiep/', { rel: 'index.html', cache: 'no-cache', isAdminPage: false, isIndexHtml: true }],
   ['/admin', { rel: 'admin.html', cache: 'no-store', isAdminPage: true }],
   ['/admin/', { rel: 'admin.html', cache: 'no-store', isAdminPage: true }],
   ['/styles.css', { rel: 'styles.css', cache: 'public, max-age=3600', isAdminPage: false }],
@@ -293,12 +307,12 @@ const server = http.createServer(async (req, res) => {
       baseHeaders['ETag'] = `"${stat.size.toString(16)}-${Math.floor(stat.mtimeMs).toString(16)}"`;
     }
 
-    // Dynamic OG/meta personalization for ?guest=... links (HTML-escaped server-side)
+    // Dynamic OG/meta personalization for ?guest=... and /thiep alias (HTML-escaped server-side)
     if (resolved.isIndexHtml) {
       const guestName = extractSafeGuestParam(req.url);
-      if (guestName) {
+      if (guestName || urlPath === '/thiep' || urlPath === '/thiep/') {
         try {
-          const html = renderPersonalizedIndexHtml(resolved.filePath, guestName);
+          const html = renderPersonalizedIndexHtml(resolved.filePath, { guestName, pathname: urlPath });
           const buf = Buffer.from(html, 'utf8');
           res.writeHead(200, {
             ...baseHeaders,
