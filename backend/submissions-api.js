@@ -6,29 +6,7 @@ const WISHES_FILE = path.join(SUBMISSIONS_DIR, 'wishes.json');
 const RSVPS_FILE = path.join(SUBMISSIONS_DIR, 'rsvps.json');
 const ALL_FILE = path.join(SUBMISSIONS_DIR, 'all-submissions.json');
 
-const DEFAULT_WISHES = [
-  {
-    id: 'wish_seed_1',
-    name: 'Gia đình cô Lan',
-    message: 'Chúc hai cháu Nho Tín & Hồng Ngân trăm năm hạnh phúc, sớm sinh quý tử!',
-    time: '09:30:12 22/11/2026',
-    createdAt: '2026-11-22T09:30:12+07:00'
-  },
-  {
-    id: 'wish_seed_2',
-    name: 'Hội bạn thân',
-    message: 'Hy vọng tổ ấm nhỏ của Nho Tín và Hồng Ngân sẽ luôn rộn rã tiếng cười và hạnh phúc viên mãn.',
-    time: '14:18:45 22/11/2026',
-    createdAt: '2026-11-22T14:18:45+07:00'
-  },
-  {
-    id: 'wish_seed_3',
-    name: 'Anh chị đồng nghiệp',
-    message: 'Mong hai bạn xây dựng một mái ấm tràn đầy tiếng cười và niềm vui.',
-    time: '19:05:20 22/11/2026',
-    createdAt: '2026-11-22T19:05:20+07:00'
-  }
-];
+const DEFAULT_WISHES = [];
 
 function formatVNTime(date = new Date()) {
   const pad = (n) => String(n).padStart(2, '0');

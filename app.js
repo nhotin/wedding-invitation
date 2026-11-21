@@ -18,26 +18,15 @@
 
   const PARTICLE_COLORS = ['#a8e6a3', '#7bc47a', '#4CAF50', '#c8e6c9'];
   const WEDDING_TARGET = new Date('2026-12-20T11:30:00+07:00');
-  const STORAGE_WISHES_KEY = 'wedding_wishes_nhotin_hongngan_v2';
-  const STORAGE_RSVP_KEY = 'wedding_rsvp_nhotin_hongngan_v2';
+  const STORAGE_WISHES_KEY = 'wedding_wishes_nhotin_hongngan_v3';
+  const STORAGE_RSVP_KEY = 'wedding_rsvp_nhotin_hongngan_v3';
 
-  const DEFAULT_WISHES = [
-    {
-      name: 'Gia đình cô Lan',
-      message: 'Chúc hai cháu Nho Tín & Hồng Ngân trăm năm hạnh phúc, sớm sinh quý tử!',
-      time: '09:30:12 22/11/2026'
-    },
-    {
-      name: 'Hội bạn thân',
-      message: 'Hy vọng tổ ấm nhỏ của Nho Tín và Hồng Ngân sẽ luôn rộn rã tiếng cười và hạnh phúc viên mãn.',
-      time: '14:18:45 22/11/2026'
-    },
-    {
-      name: 'Anh chị đồng nghiệp',
-      message: 'Mong hai bạn xây dựng một mái ấm tràn đầy tiếng cười và niềm vui.',
-      time: '19:05:20 22/11/2026'
-    }
-  ];
+  // Clean up old dev localStorage submissions
+  try {
+    ['wedding_wishes_nhotin_hongngan_v1', 'wedding_wishes_nhotin_hongngan_v2', 'wedding_rsvp_nhotin_hongngan_v1', 'wedding_rsvp_nhotin_hongngan_v2'].forEach((k) => localStorage.removeItem(k));
+  } catch (_) {}
+
+  const DEFAULT_WISHES = [];
 
   /* ==========================================================================
      1. HERO ARCH TWIN STARS (Exact eD algorithm from 71675.js)
@@ -1030,6 +1019,81 @@
   });
 
   /* ==========================================================================
+     10. EXACT AUTO-FIT FONT SIZING (Module 20376 + 71675 eA + 35490 p.GT)
+     ========================================================================== */
+  function measureTextPx(text, sizePx, fontStyle) {
+    const span = document.createElement('span');
+    span.style.visibility = 'hidden';
+    span.style.position = 'absolute';
+    span.style.whiteSpace = 'nowrap';
+    span.style.fontSize = `${sizePx}px`;
+    span.style.fontFamily = fontStyle.fontFamily || 'ui-serif, Georgia, Cambria, "Times New Roman", Times, ChungDoiIndic, serif';
+    if (fontStyle.fontWeight !== undefined) span.style.fontWeight = String(fontStyle.fontWeight);
+    if (fontStyle.letterSpacing !== undefined) span.style.letterSpacing = fontStyle.letterSpacing;
+    span.textContent = text;
+    document.body.appendChild(span);
+    const w = span.offsetWidth;
+    document.body.removeChild(span);
+    return w;
+  }
+
+  function computeAutoFitSize(text, mobileBase, desktopBase, containerEl, fontStyle, opts = {}) {
+    const isMd = window.innerWidth >= 768;
+    const base = isMd ? desktopBase : mobileBase;
+    if (!text || !containerEl) return base;
+    const cw = containerEl.offsetWidth;
+    if (cw === 0) return base;
+    const minSize = opts.minSize ?? Math.max(12, 0.5 * base);
+    const widthScale = opts.widthScale ?? 1;
+    const fitPadding = opts.fitPadding ?? 0.95;
+    const targetW = cw * widthScale;
+
+    let measured = measureTextPx(text, base, fontStyle);
+    let est = base;
+    if (measured > targetW) {
+      est = (targetW / measured) * base * fitPadding;
+      est = Math.max(minSize, Math.min(base, est));
+    }
+    let size = Math.round(est);
+    let curW = measureTextPx(text, size, fontStyle);
+    if (curW > targetW && size > minSize) {
+      size = Math.max(minSize, Math.round((targetW / curW) * size * fitPadding));
+      curW = measureTextPx(text, size, fontStyle);
+      if (curW > targetW && size > minSize) {
+        size = Math.max(minSize, Math.floor((targetW / curW) * size * fitPadding));
+      }
+    }
+    while (size > minSize && measureTextPx(text, size, fontStyle) > targetW) {
+      size -= 1;
+    }
+    return size;
+  }
+
+  function updateAutoFitTypography() {
+    // 1. Couple Full Names in Ceremony (eA in 71675: mobile 40px, desktop 64px, EB Garamond)
+    const groomFullEl = document.getElementById('groom-fullname');
+    const brideFullEl = document.getElementById('bride-fullname');
+    if (groomFullEl && brideFullEl) {
+      const styleCfg = { fontFamily: '"EB Garamond", serif' };
+      const optsCfg = { minSize: 24, widthScale: 1, fitPadding: 0.95 };
+      const s1 = computeAutoFitSize(groomFullEl.textContent.trim(), 40, 64, groomFullEl, styleCfg, optsCfg);
+      const s2 = computeAutoFitSize(brideFullEl.textContent.trim(), 40, 64, brideFullEl, styleCfg, optsCfg);
+      const finalFullSize = Math.min(s1, s2);
+      groomFullEl.style.fontSize = `${finalFullSize}px`;
+      brideFullEl.style.fontSize = `${finalFullSize}px`;
+    }
+
+    // 2. Parents' names (p.GT in 35490: mobile 14px, desktop 15px, Baskerville 600)
+    const parentEls = document.querySelectorAll('.grid-rows-subgrid > span.font-semibold');
+    if (parentEls.length > 0) {
+      const pSize = window.innerWidth >= 768 ? 15 : 14;
+      parentEls.forEach((el) => {
+        el.style.fontSize = `${pSize}px`;
+      });
+    }
+  }
+
+  /* ==========================================================================
      INIT
      ========================================================================== */
   initAmbientParticles();
@@ -1041,8 +1105,15 @@
   fetchWishesFromServer();
 
   updateHeroArchStars();
+  updateAutoFitTypography();
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(updateHeroArchStars);
+    document.fonts.ready.then(() => {
+      updateHeroArchStars();
+      updateAutoFitTypography();
+    });
   }
-  window.addEventListener('resize', updateHeroArchStars);
+  window.addEventListener('resize', () => {
+    updateHeroArchStars();
+    updateAutoFitTypography();
+  });
 })();
