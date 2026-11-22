@@ -30,7 +30,7 @@
   "ceremony": {
     "name": "Lễ Thành Hôn",
     "headline": "TRÂN TRỌNG BÁO TIN LỄ THÀNH HÔN CỦA CON CHÚNG TÔI",
-    "locationType": "TƯ GIA",
+    "locationType": "",
     "time": "08:05",
     "timeDisplay": "08H05",
     "dayOfWeek": "Chủ Nhật",
@@ -46,7 +46,7 @@
     "date": "2026-12-20",
     "lunarDate": "Ngày 12 tháng 11 năm Bính Ngọ",
     "venue": {
-      "name": "TƯ GIA",
+      "name": "",
       "address": "B9 - Ô 07, Đ. Ven Sông Thị Tính, Khu Mega City Cầu Đò 2, P. Long Nguyên, TP. Hồ Chí Minh",
       "coordinates": {
         "lat": 11.143371,

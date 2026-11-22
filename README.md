@@ -30,7 +30,7 @@ Website thiệp cưới trực tuyến phong cách Song Hỷ Xanh dành cho Lễ
 - **Nhà Gái**: Ông Mai Xuân Đông & Bà Lê Thị Thu (Thôn Phong An, Xã Phù Cát, Tỉnh Gia Lai)
 - **Lễ Thành Hôn**: 08:05 - Chủ Nhật, ngày 20 tháng 12 năm 2026 (tức ngày 12 tháng 11 năm Bính Ngọ)
 - **Tiệc Cưới**: Đón khách 10:30, Khai tiệc 11:30 cùng ngày
-- **Địa Điểm**: Tư Gia - B9 - Ô 07, Đường Ven Sông Thị Tính, Khu Mega City Cầu Đò 2, P. Long Nguyên, TP. Hồ Chí Minh
+- **Địa Điểm**: B9 - Ô 07, Đường Ven Sông Thị Tính, Khu Mega City Cầu Đò 2, P. Long Nguyên, TP. Hồ Chí Minh
 
 ---
 

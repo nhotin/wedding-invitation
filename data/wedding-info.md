@@ -16,7 +16,6 @@ Nguồn: https://sonstudio.vn/thiep-cuoi-online-v2-copy-copy/
 - **Địa chỉ:** Thôn Phong An, Xã Phù Cát, Tỉnh Gia Lai
 
 ## 3. Lễ Thành Hôn
-- **Địa điểm:** Tư gia
 - **Thời gian:** 08:05 — Chủ Nhật, ngày 20 tháng 12 năm 2026
 - **Âm lịch:** Ngày 12 tháng 11 năm Bính Ngọ
 
@@ -24,7 +23,7 @@ Nguồn: https://sonstudio.vn/thiep-cuoi-online-v2-copy-copy/
 - **Thời gian:** Chủ Nhật, ngày 20 tháng 12 năm 2026 (12/11 năm Bính Ngọ)
   - Đón khách: `10:30`
   - Khai tiệc: `11:30`
-- **Địa điểm:** Tư gia — B9 - Ô 07, Đ. Ven Sông Thị Tính, Khu Mega City Cầu Đò 2, P. Long Nguyên, TP. Hồ Chí Minh
+- **Địa điểm:** B9 - Ô 07, Đ. Ven Sông Thị Tính, Khu Mega City Cầu Đò 2, P. Long Nguyên, TP. Hồ Chí Minh
 - **Tọa độ Google Maps:** `11.143367989028743, 106.58866807504735`
 - **Link chỉ đường:** https://www.google.com/maps/search/?api=1&query=11.143367989028743,106.58866807504735
 
